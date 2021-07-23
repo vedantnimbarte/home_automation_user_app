@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "Home_Automation",
+    "slug": "Home_Automation",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "Home_Automation"
+}
