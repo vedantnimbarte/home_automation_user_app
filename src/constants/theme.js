@@ -14,7 +14,7 @@ export const IMAGES = {
 };
 
 export const COLORS = {
-  Primary: "#FDCA2B",
-  Background: "#444444",
+  Primary: "#FFC619",
+  Background: "#000000",
   White: "#ffffff",
 };
