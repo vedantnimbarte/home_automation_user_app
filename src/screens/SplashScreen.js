@@ -2,7 +2,13 @@ import React from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
 import { COLORS, IMAGES, SIZES } from "../constants/theme";
 
-export default function SplashScreen() {
+export default function SplashScreen({ navigation }) {
+  React.useEffect(() => {
+    setInterval(() => {
+      navigation.navigate("Home");
+    }, 2000);
+  });
+
   return (
     <View style={styles.MainContainer}>
       <Image source={IMAGES.Logo} style={styles.Logo} />
