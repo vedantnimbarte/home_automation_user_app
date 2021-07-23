@@ -10,3 +10,9 @@ export const SIZES = {
 export const IMAGES = {
   Logo: require("../assets/images/logo.png"),
 };
+
+export const COLORS = {
+  Primary: "#FDCA2B",
+  Background: "#444444",
+  White: "#ffffff",
+};
