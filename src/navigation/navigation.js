@@ -1,6 +1,6 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import { SplashScreen, Home } from "../screens";
+import { SplashScreen, Home, Room } from "../screens";
 import { COLORS } from "../constants/theme";
 
 const Stack = createStackNavigator();
@@ -25,6 +25,7 @@ export default function Navigation() {
           headerLeft: false,
         }}
       />
+      <Stack.Screen name="Room" component={Room} />
     </Stack.Navigator>
   );
 }
