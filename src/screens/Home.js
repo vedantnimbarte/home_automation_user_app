@@ -100,9 +100,8 @@ export default function Home({ navigation }) {
           <Text style={styles.ContainerTitle}>Rooms</Text>
           <View style={styles.RoomsContainer}>
             <FlatList
-              // numColumns={2}
+              numColumns={2}
               data={rooms}
-              horizontal={true}
               keyExtractor={(item) => item.id.toString()}
               renderItem={_renderRooms}
             />
