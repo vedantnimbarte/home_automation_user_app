@@ -47,6 +47,10 @@ export default function Home() {
     );
   };
 
+  const _navigationHandler = (screen_name) => {
+    NavigationPreloadManager.navigate(screen_name, { room: screen_name });
+  };
+
   const _renderNotifications = ({ item }) => {
     return (
       <View style={styles.NotificationContainer}>
