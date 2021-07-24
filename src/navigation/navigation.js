@@ -17,7 +17,11 @@ export default function Navigation() {
         },
       }}
     >
-      <Stack.Screen name="SplashScreen" component={SplashScreen} />
+      <Stack.Screen
+        name="SplashScreen"
+        component={SplashScreen}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen
         name="Home"
         component={Home}
