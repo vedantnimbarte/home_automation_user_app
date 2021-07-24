@@ -4,7 +4,7 @@ import { COLORS, IMAGES, SIZES } from "../constants/theme";
 
 export default function SplashScreen({ navigation }) {
   React.useEffect(() => {
-    setInterval(() => {
+    setTimeout(() => {
       navigation.navigate("Home");
     }, 2000);
   });
