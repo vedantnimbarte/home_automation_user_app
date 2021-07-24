@@ -94,7 +94,7 @@ export default function Home() {
             <FlatList
               numColumns={2}
               data={rooms}
-              keyExtractor={(item) => item.id}
+              keyExtractor={(item) => item.id.toString()}
               renderItem={_renderRooms}
             />
           </View>
@@ -130,7 +130,7 @@ export default function Home() {
           <View style={styles.NotificationCardContainer}>
             <FlatList
               data={notifications}
-              keyExtractor={(item) => item.id}
+              keyExtractor={(item) => item.id.toString()}
               horizontal={true}
               showsHorizontalScrollIndicator={false}
               pagingEnabled={true}
