@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import { COLORS, IMAGES, SIZES } from "../constants/theme";
 
-export default function Home() {
+export default function Home({ navigation }) {
   const [doorLockStatus, setDoorLockStatus] = React.useState(false);
   const [rooms, setRooms] = React.useState();
   const [notifications, setNotifications] = React.useState();
@@ -36,19 +36,23 @@ export default function Home() {
     { id: 3, notificationTitle: "Power Off", message: 2 },
   ];
 
-  const _toggleDoorLockwitch = () =>
+  const _toggleDoorLockwitch = () => {
     setDoorLockStatus((previousState) => !previousState);
+  };
 
   const _renderRooms = ({ item }) => {
     return (
-      <TouchableOpacity style={styles.RoomContainer}>
+      <TouchableOpacity
+        style={styles.RoomContainer}
+        onPress={() => _navigationHandler(item.room)}
+      >
         <Text style={styles.RoomTitle}>{item.room}</Text>
       </TouchableOpacity>
     );
   };
 
   const _navigationHandler = (screen_name) => {
-    NavigationPreloadManager.navigate("Room", { room: screen_name });
+    navigation.navigate("Room", { room: screen_name });
   };
 
   const _renderNotifications = ({ item }) => {
@@ -96,8 +100,9 @@ export default function Home() {
           <Text style={styles.ContainerTitle}>Rooms</Text>
           <View style={styles.RoomsContainer}>
             <FlatList
-              numColumns={2}
+              // numColumns={2}
               data={rooms}
+              horizontal={true}
               keyExtractor={(item) => item.id.toString()}
               renderItem={_renderRooms}
             />
