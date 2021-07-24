@@ -10,13 +10,40 @@ import {
 } from "react-native";
 import { COLORS, IMAGES, SIZES } from "../constants/theme";
 import { FontAwesome5, AntDesign, Entypo } from "@expo/vector-icons";
+import { CONFIG } from "../constants/config";
+import { get } from "react-native/Libraries/Utilities/PixelRatio";
 
 export default function Room({ navigation, route }) {
-  const Appliances = [
-    { id: 1, appliance: "Light", status: 1, icon: "lightbulb" },
-    { id: 3, appliance: "Fan", status: 0, icon: "fan" },
-    { id: 4, appliance: "AC", status: 0, icon: "fan" },
-  ];
+  const [status, setStatus] = React.useState(false);
+  const [Appliances, setAppliances] = React.useState();
+
+  React.useEffect(() => {
+    getRoomInfo();
+  }, []);
+
+  const getRoomInfo = async () => {
+    const response = await fetch(
+      `http://${CONFIG.IP}:${CONFIG.PORT}/config/getRoomInfo?user_id=1234&room_name='${route.params.roomInfo.room}'`
+    );
+    const result = await response.json();
+    setAppliances(result.results);
+  };
+
+  const updateApplianceStatus = async (data) => {
+    let message = "0";
+    if (data.relay_status === 0) {
+      message = "1";
+    }
+    const response = await fetch(
+      `http://${CONFIG.IP}:${CONFIG.PORT}/device/${data.serial_no}/${data.relay}/${message}/${data.id}`
+    );
+    const result = await response.json();
+    getRoomInfo();
+  };
+
+  const _toggleSwitch = () => {
+    setStatus((previousState) => !previousState);
+  };
 
   const _renderAppliances = ({ item }) => {
     return (
@@ -46,13 +73,14 @@ export default function Room({ navigation, route }) {
             }}
           >
             {item.appliance}
+            {Boolean(item.relay_status)}
           </Text>
         </View>
         <Switch
-          trackColor={{ false: COLORS.Primary, true: COLORS.Background }}
-          thumbColor={item.status ? COLORS.White : COLORS.Background}
-          value={item.status}
-          //   onValueChange={_toggleDoorLockwitch}
+          trackColor={{ false: COLORS.Background, true: COLORS.Primary }}
+          thumbColor={COLORS.White}
+          value={Boolean(item.relay_status)}
+          onValueChange={() => updateApplianceStatus(item)}
           style={styles.ApplianceSwitch}
         />
       </View>
@@ -70,7 +98,7 @@ export default function Room({ navigation, route }) {
         </TouchableOpacity>
       </View>
       <View style={styles.RoomNameContainer}>
-        <Text style={styles.RoomName}>{route.params.room}</Text>
+        <Text style={styles.RoomName}>{route.params.roomInfo.room}</Text>
         <View style={styles.RoomNameUnderLine} />
       </View>
       <View style={styles.AppliancesContainer}>
