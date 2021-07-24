@@ -11,6 +11,7 @@ import {
   Switch,
 } from "react-native";
 import { COLORS, IMAGES, SIZES } from "../constants/theme";
+import { CONFIG } from "../constants/config";
 
 export default function Home({ navigation }) {
   const [doorLockStatus, setDoorLockStatus] = React.useState(false);
@@ -18,17 +19,18 @@ export default function Home({ navigation }) {
   const [notifications, setNotifications] = React.useState();
 
   React.useEffect(() => {
-    setRooms(Rooms);
     setNotifications(Notifications);
     LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
+    getRooms();
   }, []);
 
-  const Rooms = [
-    { id: 1, room: "Master Bedroom" },
-    { id: 2, room: "Bedroom" },
-    { id: 3, room: "Kids Room" },
-    { id: 4, room: "Drawing Room" },
-  ];
+  const getRooms = async () => {
+    const response = await fetch(
+      `http://${CONFIG.IP}:${CONFIG.PORT}/config/getRoomsAssignedToUser?user_id=1234`
+    );
+    const result = await response.json();
+    setRooms(result.results);
+  };
 
   const Notifications = [
     { id: 1, notificationTitle: "Power Off", message: 3 },
@@ -44,15 +46,15 @@ export default function Home({ navigation }) {
     return (
       <TouchableOpacity
         style={styles.RoomContainer}
-        onPress={() => _navigationHandler(item.room)}
+        onPress={() => _navigationHandler(item)}
       >
         <Text style={styles.RoomTitle}>{item.room}</Text>
       </TouchableOpacity>
     );
   };
 
-  const _navigationHandler = (screen_name) => {
-    navigation.navigate("Room", { room: screen_name });
+  const _navigationHandler = (data) => {
+    navigation.navigate("Room", { roomInfo: data });
   };
 
   const _renderNotifications = ({ item }) => {
@@ -99,12 +101,16 @@ export default function Home({ navigation }) {
         <View style={styles.RoomsCardContainer}>
           <Text style={styles.ContainerTitle}>Rooms</Text>
           <View style={styles.RoomsContainer}>
-            <FlatList
-              numColumns={2}
-              data={rooms}
-              keyExtractor={(item) => item.id.toString()}
-              renderItem={_renderRooms}
-            />
+            {!rooms ? (
+              <Text style={{ color: COLORS.Primary }}>No rooms available</Text>
+            ) : (
+              <FlatList
+                numColumns={2}
+                data={rooms}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={_renderRooms}
+              />
+            )}
           </View>
         </View>
         <View style={styles.DoorLockCard}>
