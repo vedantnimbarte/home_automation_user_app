@@ -29,7 +29,11 @@ export default function Navigation() {
           headerLeft: false,
         }}
       />
-      <Stack.Screen name="Room" component={Room} />
+      <Stack.Screen
+        name="Room"
+        component={Room}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 }
