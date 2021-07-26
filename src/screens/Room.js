@@ -42,7 +42,7 @@ export default function Room({ navigation, route }) {
 
   const _renderAppliances = ({ item }) => {
     return (
-      <View
+      <TouchableOpacity
         style={{
           ...(item.relay_status
             ? { backgroundColor: COLORS.Primary }
@@ -54,6 +54,7 @@ export default function Room({ navigation, route }) {
           padding: 20,
           opacity: 0.8,
         }}
+        onPress={() => updateApplianceStatus(item)}
       >
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <FontAwesome5 name={item.icon} size={30} color={COLORS.Primary} />
@@ -72,13 +73,13 @@ export default function Room({ navigation, route }) {
             {Boolean(item.relay_status)}
           </Text>
         </View>
-        <TouchableOpacity
+        <View
           style={{ padding: 10 }}
-          onPress={() => updateApplianceStatus(item)}
+          // onPress={() => updateApplianceStatus(item)}
         >
           <AntDesign name="poweroff" size={30} color={COLORS.White} />
-        </TouchableOpacity>
-      </View>
+        </View>
+      </TouchableOpacity>
     );
   };
   return (
