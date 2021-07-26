@@ -8,12 +8,45 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   ScrollView,
+  Alert,
 } from "react-native";
 import { COLORS, IMAGES, SIZES } from "../constants/theme";
+import { CONFIG } from "../constants/config";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export default function Login() {
+export default function Login({ navigation }) {
   const [email, setEmail] = React.useState();
   const [password, setPassword] = React.useState();
+
+  const _loginHandler = async () => {
+    const url = `http://${CONFIG.IP}:${CONFIG.PORT}/auth/login`;
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    }).catch((error) =>
+      ToastAndroid.show(
+        "unable to get data. Please check your device is connected to internet.",
+        ToastAndroid.LONG
+      )
+    );
+    const result = await response.json();
+
+    if (result.success === 1) {
+      await AsyncStorage.setItem("userDetails", JSON.stringify(result));
+      _navigationHandler("Home");
+    } else {
+      Alert.alert(
+        result.message,
+        "Check your email address and password again."
+      );
+    }
+  };
+  const _navigationHandler = (screen_name) => {
+    navigation.navigate(screen_name);
+  };
 
   return (
     <KeyboardAvoidingView
@@ -44,7 +77,7 @@ export default function Login() {
               onChangeText={(text) => setPassword(text)}
               style={styles.FormInput}
             />
-            <TouchableOpacity style={styles.LoginBtn}>
+            <TouchableOpacity style={styles.LoginBtn} onPress={_loginHandler}>
               <Text style={styles.LoginText}>Login</Text>
             </TouchableOpacity>
           </View>
