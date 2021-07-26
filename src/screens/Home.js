@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import { COLORS, IMAGES, SIZES } from "../constants/theme";
 import { CONFIG } from "../constants/config";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Home({ navigation }) {
   const [doorLockStatus, setDoorLockStatus] = React.useState(false);
@@ -22,11 +23,21 @@ export default function Home({ navigation }) {
     setNotifications(Notifications);
     LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
     getRooms();
+    setInterval(() => {
+      getRooms();
+    }, 5000);
   }, []);
 
+  const _logout = async () => {
+    await AsyncStorage.removeItem("userDetails");
+    navigation.navigate("Login");
+  };
   const getRooms = async () => {
+    const userData = await AsyncStorage.getItem("userDetails");
+    let user = JSON.parse(userData).results[0].user_id;
+
     const response = await fetch(
-      `http://${CONFIG.IP}:${CONFIG.PORT}/config/getRoomsAssignedToUser?user_id=1234`
+      `http://${CONFIG.IP}:${CONFIG.PORT}/config/getRoomsAssignedToUser?user_id=${user}`
     );
     const result = await response.json();
     setRooms(result.results);
@@ -107,7 +118,7 @@ export default function Home({ navigation }) {
               <FlatList
                 numColumns={2}
                 data={rooms}
-                keyExtractor={(item) => item.id.toString()}
+                // keyExtractor={(item) => item.id.toString()}
                 renderItem={_renderRooms}
               />
             )}
