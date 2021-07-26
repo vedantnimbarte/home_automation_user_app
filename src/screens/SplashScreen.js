@@ -5,7 +5,7 @@ import { COLORS, IMAGES, SIZES } from "../constants/theme";
 export default function SplashScreen({ navigation }) {
   React.useEffect(() => {
     setTimeout(() => {
-      navigation.navigate("Home");
+      navigation.navigate("Login");
     }, 2000);
   });
 
