@@ -52,6 +52,7 @@ export default function Room({ navigation, route }) {
           width: SIZES.Width * 0.35,
           alignItems: "center",
           padding: 20,
+          opacity: 0.8,
         }}
       >
         <View style={{ flexDirection: "row", alignItems: "center" }}>
