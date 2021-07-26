@@ -14,7 +14,6 @@ import { CONFIG } from "../constants/config";
 import { get } from "react-native/Libraries/Utilities/PixelRatio";
 
 export default function Room({ navigation, route }) {
-  const [status, setStatus] = React.useState(false);
   const [Appliances, setAppliances] = React.useState();
 
   React.useEffect(() => {
@@ -41,16 +40,12 @@ export default function Room({ navigation, route }) {
     getRoomInfo();
   };
 
-  const _toggleSwitch = () => {
-    setStatus((previousState) => !previousState);
-  };
-
   const _renderAppliances = ({ item }) => {
     return (
       <View
         style={{
-          ...(item.status
-            ? { backgroundColor: COLORS.White }
+          ...(item.relay_status
+            ? { backgroundColor: COLORS.Primary }
             : { backgroundColor: "gray" }),
           borderRadius: 20,
           margin: 10,
@@ -76,13 +71,12 @@ export default function Room({ navigation, route }) {
             {Boolean(item.relay_status)}
           </Text>
         </View>
-        <Switch
-          trackColor={{ false: COLORS.Background, true: COLORS.Primary }}
-          thumbColor={COLORS.White}
-          value={Boolean(item.relay_status)}
-          onValueChange={() => updateApplianceStatus(item)}
-          style={styles.ApplianceSwitch}
-        />
+        <TouchableOpacity
+          style={{ padding: 10 }}
+          onPress={() => updateApplianceStatus(item)}
+        >
+          <AntDesign name="poweroff" size={30} color={COLORS.White} />
+        </TouchableOpacity>
       </View>
     );
   };
