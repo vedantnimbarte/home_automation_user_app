@@ -20,17 +20,21 @@ export default function Home({ navigation }) {
   const [notifications, setNotifications] = React.useState();
 
   React.useEffect(() => {
+    _validate();
     setNotifications(Notifications);
     LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
     getRooms();
     setInterval(() => {
+      _validate();
       getRooms();
     }, 5000);
   }, []);
 
-  const _logout = async () => {
-    await AsyncStorage.removeItem("userDetails");
-    navigation.navigate("Login");
+  const _validate = async () => {
+    const userData = await AsyncStorage.getItem("userDetails");
+    if (!userData) {
+      navigation.navigate("Login");
+    }
   };
   const getRooms = async () => {
     const userData = await AsyncStorage.getItem("userDetails");
