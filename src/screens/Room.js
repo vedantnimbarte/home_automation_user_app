@@ -11,18 +11,23 @@ import {
 import { COLORS, IMAGES, SIZES } from "../constants/theme";
 import { FontAwesome5, AntDesign, Entypo } from "@expo/vector-icons";
 import { CONFIG } from "../constants/config";
-import { get } from "react-native/Libraries/Utilities/PixelRatio";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Room({ navigation, route }) {
   const [Appliances, setAppliances] = React.useState();
 
   React.useEffect(() => {
     getRoomInfo();
+    setInterval(() => {
+      getRoomInfo();
+    }, 2000);
   }, []);
 
   const getRoomInfo = async () => {
+    const userData = await AsyncStorage.getItem("userDetails");
+    let userInfo = JSON.parse(userData).results[0].user_id;
     const response = await fetch(
-      `http://${CONFIG.IP}:${CONFIG.PORT}/config/getRoomInfo?user_id=1234&room_name='${route.params.roomInfo.room}'`
+      `http://${CONFIG.IP}:${CONFIG.PORT}/config/getRoomInfo?user_id=${userInfo}&room_name='${route.params.roomInfo.room}'`
     );
     const result = await response.json();
     setAppliances(result.results);
